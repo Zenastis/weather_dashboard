@@ -1,4 +1,13 @@
+window.addEventListener('load', function (){
+    var existingSearches;
+    if (!JSON.parse(localStorage.getItem('searches'))) {
+        existingSearches = [];
+    } else {
+        existingSearches = JSON.parse(localStorage.getItem('searches'));
+    }
+})
 
+var searchItems = [];
 
 
 function forecast (searchValue){
@@ -18,31 +27,40 @@ function forecast (searchValue){
 
             for (var i = 0; i < data.list.length; i++) {
                 if (data.list[i].dt_txt.indexOf('15:00:00') !== -1) {
+                    
                     var col = document.createElement('div');
                     col.classList.add('col-md-2');
+                    
                     var card = document.createElement('div');
                     card.classList.add('card', 'bg-primary', 'text-white');
+                    
                     var wind = document.createElement('p');
                     wind.classList.add('card-text');
                     wind.textContent= `Wind Speed: ${data.list[i].wind.speed} mph`;
+                    
                     var humidity = document.createElement('p');
                     humidity.classList.add('card-text');
                     humidity.textContent = `Humidity: ${data.list[i].main.humidity} %`
+                    
                     var body = document.createElement('div');
                     body.classList.add('card-body', 'p-2');
+                   
                     var title = document.createElement('h5');
                     title.classList.add('card-title');
                     title.textContent = new Date(
                         data.list[i].dt_txt
                     ).toLocaleDateString();
+                   
                     var img = document.createElement('img');
                     img.setAttribute(
                         'src',
                         `http://openweathermap.org/img/w/${data.list[i].weather[0].icon}.png`
                     );
+                    
                     var para1 = document.createElement('p');
                     para1.classList.add('card-text');
                     para1.textContent = `Temp: ${data.list[i].main.temp_max} degrees`;
+                    
                     var para2 = document.createElement('p');
                     para2.classList.add('card-text');
                     para2.textContent = `Humidity: ${data.list[i].main.humidity} %`;
@@ -71,7 +89,9 @@ oneCall()
 
 const searches = (term) => {
     if (searches && existingSearches.length > 0) {
+        
         var searches = JSON.parse(localStorage.getItem('history'));
+        
         var newSearches = [...oldSearches, term];
         localStorage.setItem('searches', JSON.stringify(newSearches));
     } else {
@@ -90,8 +110,11 @@ function weather (searchValue){
     })
     .then(function(data){
         console.log(data)
+        
         var temp="tempurature:"+data.main.temp
+        
         var wind="windspeed:"+data.wind.speed
+        
         var humid="humidity:"+data.main.humidity
         $("#today").append(temp,wind,humid)
     })
@@ -99,4 +122,15 @@ function weather (searchValue){
 weather()
 
 
+function requestSearch () {
+    var searchValue = document.querySelector('#search-value').value;
+    if (searchValue) {
+        searchWeather(searchValue);
+        makeRow(searchValue);
+        document.querySelector('#search-value').value = '';
+    }
+}
 
+document
+    .querySelector('#search-button')
+    .addEventListener('click', getSearchVal);
