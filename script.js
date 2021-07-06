@@ -119,18 +119,17 @@ function weather (searchValue){
         $("#today").append(temp,wind,humid)
     })
 }
-weather()
 
 
 function requestSearch () {
     var searchValue = document.querySelector('#search-value').value;
     if (searchValue) {
-        searchWeather(searchValue);
-        makeRow(searchValue);
         document.querySelector('#search-value').value = '';
+        weather(searchValue);
+        // makeRow(searchValue);
     }
 }
 
 document
     .querySelector('#search-button')
-    .addEventListener('click', getSearchVal);
+    .addEventListener('click', requestSearch);
