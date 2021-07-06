@@ -46,10 +46,40 @@ function forecast (searchValue){
                     var para2 = document.createElement('p');
                     para2.classList.add('card-text');
                     para2.textContent = `Humidity: ${data.list[i].main.humidity} %`;
+                    
+                    col.appendChild(card);
+                    body.appendChild(title, img, wind, humidity, para1, para2);
+                    card.appendChild(body)
+                    forecast2.appendChild(col);
                 }
             }
-        })
+        });
 }
+
+
+function oneCall (){
+    var requestOneCall = "https://api.openweathermap.org/data/2.5/onecall?lat=35.2271&lon=-80.8431&exclude=hourly&appid=54e1375c02bb77b1a951b0a2a1264c0d"
+    fetch(requestOneCall)
+    .then(function(response){
+        return response.json()
+    })
+    .then(function(data){
+        console.log(data)
+    })
+}
+oneCall()
+
+const searches = (term) => {
+    if (searches && existingSearches.length > 0) {
+        var searches = JSON.parse(localStorage.getItem('history'));
+        var newSearches = [...oldSearches, term];
+        localStorage.setItem('searches', JSON.stringify(newSearches));
+    } else {
+        searchItems.push(term);
+        localStorage.setItem('history', JSON.stringify(newSearches));
+    }
+};
+
 
 function weather (searchValue){
 
@@ -69,15 +99,4 @@ function weather (searchValue){
 weather()
 
 
-function oneCall (){
-    var requestOneCall = "https://api.openweathermap.org/data/2.5/onecall?lat=35.2271&lon=-80.8431&exclude=hourly&appid=54e1375c02bb77b1a951b0a2a1264c0d"
-    fetch(requestOneCall)
-    .then(function(response){
-        return response.json()
-    })
-    .then(function(data){
-        console.log(data)
-    })
-}
-oneCall()
 
